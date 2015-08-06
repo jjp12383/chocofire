@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-5 col-md-3">
+            <h2 class="heading-2">{{listing.maker}}</h2>
+            <h3 class="heading-3">{{listing.name}}</h3>
+        </div>
+        <div class="col-lg-7 col-md-9">
+          <div class="form form-horizontal">
+            <div class="form-group">
+              <label class="rating-label control-label col-md-4">Average Rating</label>
+              <div class="col-lg-5 col-md-4">
+                <jp-rating id="ratingBar" class="rating" data-ng-model="listing.rating" max="10" popover-template="ratingPopover.templateUrl" popover-placement="bottom" popover-title="{{ratingPopover.title}}" readonly="true">
+              </div>
+              <div class="col-lg-3 col-md-4">
+                <button class="btn btn-sm btn-primary" style="margin-top: 5px;" id="leaveReview" data-ng-click="showReview = !showReview"><span data-ng-show="!reviewSubmitted">Leave A Review</span><span data-ng-show="reviewSubmitted">Edit Your Review</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div data-ng-repeat="review in listing.userReviews">
+          <a class="user-link">{{review.user}}</a>
+          <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonly="true"></jp-rating>
+          <span class="time-ago">{{review.dateTime | timeago}}</span>
+          <br />
+          <span class="review-text">"{{review.content}}"</span>
+        </div>
+      </div>
+    </div>
+    <div class="row" data-ng-hide="!showReview">
+      <div class="col-md-12">
+        <jp-rating id="ratingBar2" class="rating pull-left" data-ng-model="rating" max="10" readonly="false"></jp-rating>
+        <textarea data-ng-model="reviewText" class="form-control" placeholder="Leave your review"></textarea>
+        <button class="btn btn-sm btn-primary" data-ng-click="leaveReview(); showReview = !showReview">Submit</button>
+      </div>
+    </div>
+</div>
+<script type="text/ng-template" id="ratingPopover.html">
+  <div class="row">
+    <div class="col-md-6">
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fiveStar.stars" max="10" readonly="true"></jp-rating>
+    </div>
+    <div class="col-md-6">
+      <progressbar value="ratingPopover.ratingBar.fiveStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.fiveStar.bar.number === 0">{{ratingPopover.ratingBar.fiveStar.bar.number}}</b></progressbar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fourStar.stars" max="10" readonly="true"></jp-rating>
+    </div>
+    <div class="col-md-6">
+      <progressbar value="ratingPopover.ratingBar.fourStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.fourStar.bar.number === 0">{{ratingPopover.ratingBar.fourStar.bar.number}}</b></progressbar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.threeStar.stars" max="10" readonly="true"></jp-rating>
+    </div>
+    <div class="col-md-6">
+      <progressbar value="ratingPopover.ratingBar.threeStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.threeStar.bar.number === 0">{{ratingPopover.ratingBar.threeStar.bar.number}}</b></progressbar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.twoStar.stars" max="10" readonly="true"></jp-rating>
+    </div>
+    <div class="col-md-6">
+      <progressbar value="ratingPopover.ratingBar.twoStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.twoStar.bar.number === 0">{{ratingPopover.ratingBar.twoStar.bar.number}}</b></progressbar>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.oneStar.stars" max="10" readonly="true"></jp-rating>
+    </div>
+    <div class="col-md-6">
+      <progressbar value="ratingPopover.ratingBar.oneStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.oneStar.bar.number === 0">{{ratingPopover.ratingBar.oneStar.bar.number}}</b></progressbar>
+    </div>
+  </div>
+</script>

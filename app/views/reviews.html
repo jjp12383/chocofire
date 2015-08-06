@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-12">
+    <form role="form" class="row">
+      <div class="form-group">
+        <label class="control-label col-md-12" for="review">
+          <textarea class="form-control" id="review" placeholder="Your review..." data-ng-model="reviewText" required></textarea>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-12"><span data-ng-show="editReview === null">Rate this bar</span><span data-ng-show="editReview !== null">Your rating</span>
+          <jp-rating id="rating" class="rating" data-ng-model="rating" max="10" readonly="false"></jp-rating>
+        </label>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-sm" data-ng-click="leaveReview()"><span data-ng-show="editReview === null">Leave Review</span><span data-ng-show="editReview !== null">Edit Your Review</span></button>
+      </div>
+    </form>
+    <div data-ng-repeat="review in listing.userReviews">
+      <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonly="true"></jp-rating>
+      {{review.user}} said "{{review.content}}"
+    </div>
+  </div>
+</div>

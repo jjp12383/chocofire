@@ -1,0 +1,11 @@
+<h3>Tags</h3>
+<div class="col-md-5">
+  <ui-select multiple ng-model="selectedTags" theme="bootstrap" ng-disabled="disabled">
+    <ui-select-match placeholder="Select tags...">{{$item.tagName}}</ui-select-match>
+    <ui-select-choices group-by="'category'" repeat="tag in tags | filter:$select.search">
+      {{tag.tagName}}
+    </ui-select-choices>
+  </ui-select>
+</div>
+<div class="col-md-2"></div>
+<div class="col-md-5"></div>

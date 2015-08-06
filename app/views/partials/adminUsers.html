@@ -1,0 +1,47 @@
+<h3>Users</h3>
+<button class="btn btn-sm" data-ng-click="createAccount()">Add User</button>
+<div class="grid-style" data-ng-grid="userOptions"></div>
+
+<script type="text/ng-template" id="usersModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title">{{action}} User</h3>
+  </div>
+  <div class="modal-body">
+    <form role="form" class="row">
+      <div class="form-group">
+        <label class="control-label col-md-12" for="nameUser">Name
+          <input type="text" class="form-control" id="nameUser" placeholder="Name" data-ng-model="user.name">
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-12" for="email">Email
+          <input type="email" class="form-control" id="email" placeholder="Email" data-ng-model="user.emailOld" data-ng-disabled="action === 'Edit'">
+        </label>
+      </div>
+      <div class="form-group" data-ng-if="action === 'Add'">
+        <label class="control-label col-md-12" for="password">Password
+          <input type="text" class="form-control" id="password" placeholder="Password" data-ng-model="user.pass">
+        </label>
+      </div>
+      <div class="form-group" data-ng-if="action === 'Add'">
+        <label class="control-label col-md-12" for="passwordConfirm">Confirm Password
+          <input type="text" class="form-control" id="passwordConfirm" placeholder="Password" data-ng-model="user.confirm">
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-4" for="role">Role
+          <select data-ng-model="user.role" id="role" class="form-control">
+            <option value="1">User</option>
+            <option value="99">Admin</option>
+          </select>
+        </label>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">{{action}} User</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-warning" ng-click="resetPassword()" data-ng-if="action === 'Edit'">Reset Password</button>
+  </div>
+</script>
+
