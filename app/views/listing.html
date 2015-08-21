@@ -1,46 +1,52 @@
-<div class="container">
-    <div class="row">
-        <div class="col-lg-5 col-md-3">
-            <h2 class="heading-2">{{listing.maker}}</h2>
-            <h3 class="heading-3">{{listing.name}}</h3>
+<div class="row">
+  <div class="col-lg-4 col-md-3">
+    <h2 class="heading-2">{{listing.maker}}</h2>
+    <h3 class="heading-3">{{listing.name}}</h3>
+  </div>
+  <div class="col-lg-8 col-md-9">
+    <div class="form form-horizontal">
+      <div class="form-group rating-group">
+        <label class="rating-label control-label col-md-4">Average Rating</label>
+        <div class="col-md-4">
+          <jp-rating id="ratingBar" class="rating" data-ng-model="listing.rating" max="10" popover-template="ratingPopover.templateUrl" popover-placement="bottom" popover-title="{{ratingPopover.title}}" readonlyr="true"></jp-rating>
         </div>
-        <div class="col-lg-7 col-md-9">
-          <div class="form form-horizontal">
-            <div class="form-group">
-              <label class="rating-label control-label col-md-4">Average Rating</label>
-              <div class="col-lg-5 col-md-4">
-                <jp-rating id="ratingBar" class="rating" data-ng-model="listing.rating" max="10" popover-template="ratingPopover.templateUrl" popover-placement="bottom" popover-title="{{ratingPopover.title}}" readonly="true">
-              </div>
-              <div class="col-lg-3 col-md-4">
-                <button class="btn btn-sm btn-primary" style="margin-top: 5px;" id="leaveReview" data-ng-click="showReview = !showReview"><span data-ng-show="!reviewSubmitted">Leave A Review</span><span data-ng-show="reviewSubmitted">Edit Your Review</span></button>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div data-ng-repeat="review in listing.userReviews">
-          <a class="user-link">{{review.user}}</a>
-          <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonly="true"></jp-rating>
-          <span class="time-ago">{{review.dateTime | timeago}}</span>
-          <br />
-          <span class="review-text">"{{review.content}}"</span>
+        <div class="col-md-4">
+          <button class="btn btn-lg btn-primary" id="leaveReview" data-ng-click="showReview = !showReview"><span data-ng-show="!reviewSubmitted">Leave A Review</span><span data-ng-show="reviewSubmitted">Edit Your Review</span></button>
         </div>
       </div>
     </div>
-    <div class="row" data-ng-hide="!showReview">
-      <div class="col-md-12">
-        <jp-rating id="ratingBar2" class="rating pull-left" data-ng-model="rating" max="10" readonly="false"></jp-rating>
-        <textarea data-ng-model="reviewText" class="form-control" placeholder="Leave your review"></textarea>
-        <button class="btn btn-sm btn-primary" data-ng-click="leaveReview(); showReview = !showReview">Submit</button>
-      </div>
+  </div>
+</div>
+<div class="row" data-ng-hide="!showReview">
+  <div class="col-md-12">
+    <jp-rating id="ratingBar2" class="rating pull-left" data-ng-model="rating" max="10" readonlyr="false"></jp-rating>
+    <textarea data-ng-model="reviewText" class="form-control" placeholder="Leave your review"></textarea>
+    <button class="btn btn-sm btn-primary review-button btn-row" data-ng-click="leaveReview(); showReview = !showReview">Submit</button>
+    <button class="btn btn-sm btn-warning review-button btn-row" data-ng-click="showReview = !showReview">Cancel</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <hr>
+    <legend>Reviews</legend>
+    <div data-ng-repeat="review in listing.userReviews" class="user-review" data-ng-init="userReviewed(review)">
+      <a class="user-link" href="#/userProfile/{{review.userId}}">{{review.user}}</a>
+      <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
+      <span class="time-ago">{{review.dateTime | timeago}}</span>
+      <button data-ng-disabled="review.userFlagged" data-ng-click="reportReview(review); userReviewed(review)" class="btn btn-primary btn-responsive btn-xs report-review-button">
+        <i class="fa fa-flag"></i>
+        <span data-ng-hide="review.userFlagged" class="hidden-xs"> Flag</span>
+        <span data-ng-show="review.userFlagged" class="hidden-xs"> Flagged By You</span>
+      </button>
+      <button data-ng-click="deleteReview(review)" data-ng-if="user.role > 74" class="btn btn-responsive btn-warning btn-xs delete-review-button"><i class="fa fa-edit"></i><span class="hidden-xs"> Delete</span></button>
+      <div class="review-text">"{{review.content}}"</div>
     </div>
+  </div>
 </div>
 <script type="text/ng-template" id="ratingPopover.html">
   <div class="row">
     <div class="col-md-6">
-      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fiveStar.stars" max="10" readonly="true"></jp-rating>
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fiveStar.stars" max="10" readonlyr="true"></jp-rating>
     </div>
     <div class="col-md-6">
       <progressbar value="ratingPopover.ratingBar.fiveStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.fiveStar.bar.number === 0">{{ratingPopover.ratingBar.fiveStar.bar.number}}</b></progressbar>
@@ -48,7 +54,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fourStar.stars" max="10" readonly="true"></jp-rating>
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.fourStar.stars" max="10" readonlyr="true"></jp-rating>
     </div>
     <div class="col-md-6">
       <progressbar value="ratingPopover.ratingBar.fourStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.fourStar.bar.number === 0">{{ratingPopover.ratingBar.fourStar.bar.number}}</b></progressbar>
@@ -56,7 +62,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.threeStar.stars" max="10" readonly="true"></jp-rating>
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.threeStar.stars" max="10" readonlyr="true"></jp-rating>
     </div>
     <div class="col-md-6">
       <progressbar value="ratingPopover.ratingBar.threeStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.threeStar.bar.number === 0">{{ratingPopover.ratingBar.threeStar.bar.number}}</b></progressbar>
@@ -64,7 +70,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.twoStar.stars" max="10" readonly="true"></jp-rating>
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.twoStar.stars" max="10" readonlyr="true"></jp-rating>
     </div>
     <div class="col-md-6">
       <progressbar value="ratingPopover.ratingBar.twoStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.twoStar.bar.number === 0">{{ratingPopover.ratingBar.twoStar.bar.number}}</b></progressbar>
@@ -72,10 +78,23 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.oneStar.stars" max="10" readonly="true"></jp-rating>
+      <jp-rating class="rating rating-small" data-ng-model="ratingPopover.ratingBar.oneStar.stars" max="10" readonlyr="true"></jp-rating>
     </div>
     <div class="col-md-6">
       <progressbar value="ratingPopover.ratingBar.oneStar.bar.percent"><b data-ng-hide="ratingPopover.ratingBar.oneStar.bar.number === 0">{{ratingPopover.ratingBar.oneStar.bar.number}}</b></progressbar>
     </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="deleteReviewModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Delete Review</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete this review? <strong>This can not be undone!</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Delete Review</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
   </div>
 </script>

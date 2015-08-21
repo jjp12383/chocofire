@@ -37,7 +37,7 @@ angular.module('chocofireApp')
  * dependency injection (see AccountCtrl), or rejects the promise if user is not logged in,
  * forcing a redirect to the /login page
  */
-  .config(['$routeProvider', 'SECURED_ROUTES', function($routeProvider, SECURED_ROUTES) {
+  /*.config(['$routeProvider', 'SECURED_ROUTES', function($routeProvider, SECURED_ROUTES) {
     // credits for this idea: https://groups.google.com/forum/#!msg/angular/dPr9BpIZID0/MgWVluo_Tg8J
     // unfortunately, a decorator cannot be use here because they are not applied until after
     // the .config calls resolve, so they can't be used during route configuration, so we have
@@ -51,23 +51,88 @@ angular.module('chocofireApp')
       SECURED_ROUTES[path] = true;
       return $routeProvider;
     };
+  }])*/
+
+  .config(['$stateProvider', 'SECURED_ROUTES', function($stateProvider, SECURED_ROUTES) {
+    $stateProvider.stateAuthenticated = function(path, state) {
+      state.resolve = state.resolve || {};
+      state.resolve.user = ['Auth', function(Auth) {
+        return Auth.$requireAuth();
+      }];
+      $stateProvider.state(path, state);
+      SECURED_ROUTES[path] = true;
+      return $stateProvider;
+    };
   }])
 
+  .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/home');
+
+    $stateProvider
+      .state('home', {
+        url: '/home',
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
+      })
+      .state('login', {
+        url: '/login',
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .stateAuthenticated('account', {
+        url: '/account',
+        templateUrl: 'views/account.html',
+        controller: 'AccountCtrl'
+      })
+      .stateAuthenticated('administration', {
+        url: '/administration',
+        templateUrl: 'views/administration.html'
+      })
+      .stateAuthenticated('administration.users', {
+        url: '/users',
+        templateUrl: 'views/partials/adminUsers.html',
+        controller: 'AdminUsersCtrl'
+      })
+      .stateAuthenticated('administration.chocolates', {
+        url: '/chocolates',
+        templateUrl: 'views/partials/adminChocolates.html',
+        controller: 'AdminChocolatesCtrl'
+      })
+      .stateAuthenticated('administration.tags', {
+        url: '/tags',
+        templateUrl: 'views/partials/adminTags.html',
+        controller: 'AdminTagsCtrl'
+      })
+      .stateAuthenticated('administration.flags', {
+        url: '/flags',
+        templateUrl: 'views/partials/adminFlags.html',
+        controller: 'AdminFlagsCtrl'
+      })
+      .state('listing', {
+        url: '/listing/:id',
+        templateUrl: 'views/listing.html',
+        controller: 'ListingCtrl'
+      })
+      .state('reviews', {
+        url: '/reviews/:id',
+        templateUrl: 'views/reviews.html',
+        controller: 'ReviewsCtrl'
+      })
+      .state('userProfile', {
+        url: '/userProfile/:id',
+        templateUrl: 'views/userProfile.html',
+        controller: 'UserProfileCtrl'
+      })
+  }])
   // configure views; whenAuthenticated adds a resolve method to ensure users authenticate
   // before trying to access that route
-  .config(['$routeProvider', function($routeProvider) {
+  /*.config(['$routeProvider', function($routeProvider) {
 
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         activeTab: 'home'
-      })
-
-      .when('/chat', {
-        templateUrl: 'views/chat.html',
-        controller: 'ChatCtrl',
-        activeTab: 'chat'
       })
       .when('/login', {
         templateUrl: 'views/login.html',
@@ -93,8 +158,12 @@ angular.module('chocofireApp')
         templateUrl: 'views/reviews.html',
         controller: 'ReviewsCtrl'
       })
+      .when('/userProfile/:id', {
+        templateUrl: 'views/userProfile.html',
+        controller: 'UserProfileCtrl'
+      })
       .otherwise({redirectTo: '/'});
-  }])
+  }])*/
 
   /**
    * Apply some route security. Any route's resolve method can reject the promise with
@@ -102,8 +171,8 @@ angular.module('chocofireApp')
    * for changes in auth status which might require us to navigate away from a path
    * that we can no longer view.
    */
-  .run(['$rootScope', '$location', 'Auth', 'SECURED_ROUTES', 'loginRedirectPath',
-    function($rootScope, $location, Auth, SECURED_ROUTES, loginRedirectPath) {
+  .run(['$rootScope', '$location', 'Auth', 'SECURED_ROUTES', 'loginRedirectPath','$state',
+    function($rootScope, $location, Auth, SECURED_ROUTES, loginRedirectPath, $state) {
       // watch for login status changes and redirect if appropriate
       Auth.$onAuth(check);
 
@@ -111,13 +180,13 @@ angular.module('chocofireApp')
       // this redirects to the login page whenever that is encountered
       $rootScope.$on('$routeChangeError', function(e, next, prev, err) {
         if( err === 'AUTH_REQUIRED' ) {
-          $location.path(loginRedirectPath);
+          $location.path('/login');
         }
       });
 
       function check(user) {
-        if( !user && authRequired($location.path()) ) {
-          $location.path(loginRedirectPath);
+        if( !user && authRequired($state.current.name) ) {
+          $location.path('/login');
         }
       }
 

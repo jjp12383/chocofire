@@ -22,8 +22,6 @@ angular.module('chocofireApp')
     });
     $scope.user = $localStorage.$default();
 
-    $scope.bars = $firebaseArray(Ref.child('chocolates'));
-
     $scope.selectedChocolate = function (selection) {
       $location.path('/listing/' + selection.originalObject.$id);
     };

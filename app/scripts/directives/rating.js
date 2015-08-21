@@ -34,14 +34,14 @@ angular.module('chocofireApp')
     };
 
     $scope.rate = function(value) {
-      if ( !$scope.readonly && value >= 0 && value <= $scope.range.length ) {
+      if ( !$scope.readonlyr && value >= 0 && value <= $scope.range.length ) {
         ngModelCtrl.$setViewValue(value/2);
         ngModelCtrl.$render();
       }
     };
 
     $scope.enter = function(value) {
-      if ( !$scope.readonly ) {
+      if ( !$scope.readonlyr ) {
         $scope.value = value;
       }
       $scope.onHover({value: value});
@@ -69,7 +69,7 @@ angular.module('chocofireApp')
     restrict: 'EA',
     require: ['jpRating', 'ngModel'],
     scope: {
-      readonly: '=?',
+      readonlyr: '=?',
       onHover: '&',
       onLeave: '&'
     },

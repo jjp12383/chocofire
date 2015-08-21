@@ -1,7 +1,18 @@
-<h3>Users</h3>
-<button class="btn btn-sm" data-ng-click="createAccount()">Add User</button>
-<div class="grid-style" data-ng-grid="userOptions"></div>
-
+<div class="row">
+  <div class="col-md-12">
+    <h3>Users</h3>
+  </div>
+</div>
+<div class="row btn-row">
+  <div class="col-md-12">
+    <button class="btn btn-primary" data-ng-click="createAccount()">Add User</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="grid-style" data-ng-grid="userOptions"></div>
+  </div>
+</div>
 <script type="text/ng-template" id="usersModal.html">
   <div class="modal-header">
     <h3 class="modal-title">{{action}} User</h3>
@@ -41,7 +52,6 @@
   <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()">{{action}} User</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    <button class="btn btn-warning" ng-click="resetPassword()" data-ng-if="action === 'Edit'">Reset Password</button>
   </div>
 </script>
 

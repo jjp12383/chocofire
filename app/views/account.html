@@ -6,7 +6,7 @@
 
     <p class="form-group">
       <label>Name:</label>
-      <input type="text" name="name" ng-model="profile.profile.name" class="form-control" />
+      <input type="text" name="name" ng-model="profile.profile.firstName" class="form-control" data-ng-blur="changeName()"/>
     </p>
 
     <p class="form-group">
@@ -16,7 +16,7 @@
   </form>
 
   <p>
-    <button role="button" ng-click="logout()" class="btn btn-danger">Log Out</button>
+    <button role="button" ng-click="logout()" class="btn btn-warning">Log Out</button>
   </p>
 </div>
 

@@ -8,10 +8,10 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/ng-grid/ng-grid.css" />
     <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -19,7 +19,9 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="chocofireApp">
+  <body ng-app="chocofireApp" data-ng-controller="RunCtrl">
+    <div class="gradient-bg gradient"></div>
+    <div class="gradient-bg-bottom gradient"></div>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -43,26 +45,24 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse" data-ng-controller="MainCtrl">
 
             <ul class="nav navbar-nav">
-              <li data-ng-class="{active: route.current.activeTab === 'home'}"><a href="#/">Home</a></li>
-              <li data-ng-show="user.role === 99" data-ng-class="{active: route.current.activeTab === 'administration'}"><a ng-href="#/administration">Administration</a></li>
-              <li data-ng-class="{active: route.current.activeTab === 'account' || route.current.activeTab === 'login'}">
-                <a ng-hide-auth="" href="#/login">log in</a>
-                <a ng-show-auth="" href="#/account">account</a>
-              </li>
+              <li data-ui-sref-active="active"><a data-ui-sref="home">Home</a></li>
+              <li data-ng-if="user.role === 99" data-ui-sref-active="active"><a data-ui-sref="administration.chocolates">Administration</a></li>
+              <li ng-hide-auth="" data-ui-sref-active="active"><a data-ui-sref="login">log In</a></li>
+              <li ng-show-auth="" data-ui-sref-active="active"><a data-ui-sref="account">Account</a></li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container">
-    <div ng-view=""></div>
+    <div class="container main">
+    <div ui-view=""></div>
     </div>
 
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
+     <!--<script>
        !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
        (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
        r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
@@ -70,7 +70,7 @@
 
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
-    </script>
+    </script>-->
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -78,7 +78,6 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/angularfire/dist/angularfire.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -93,6 +92,8 @@
     <script src="bower_components/ngstorage/ngStorage.js"></script>
     <script src="bower_components/angucomplete-alt/angucomplete-alt.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -101,21 +102,27 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/angularfire/config.js"></script>
         <script src="scripts/angularfire/firebase.ref.js"></script>
-        <script src="scripts\controllers\chat.js"></script>
-        <script src="scripts\filters\reverse.js"></script>
+        <script src="scripts/controllers/chat.js"></script>
+        <script src="scripts/filters/reverse.js"></script>
         <script src="scripts/angularfire/auth.js"></script>
-        <script src="scripts\controllers\login.js"></script>
-        <script src="scripts\controllers\account.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/account.js"></script>
         <script src="scripts/directives/ngShowAuth.js"></script>
         <script src="scripts/directives/ngHideAuth.js"></script>
-        <script src="scripts\routes.js"></script>
-        <script src="scripts/controllers/administration.js"></script>
+        <script src="scripts/routes.js"></script>
         <script src="scripts/controllers/chocolates.js"></script>
         <script src="scripts/controllers/chocolatesmodal.controller.js"></script>
         <script src="scripts/controllers/usermodal.controller.js"></script>
         <script src="scripts/controllers/reviewmodal.controller.js"></script>
+        <script src="scripts/controllers/deletereviewmodal.controller.js"></script>
+        <script src="scripts/controllers/adminUsers.js"></script>
+        <script src="scripts/controllers/adminChocolates.js"></script>
+        <script src="scripts/controllers/adminTags.js"></script>
+        <script src="scripts/controllers/adminFlags.js"></script>
         <script src="scripts/controllers/listing.js"></script>
+        <script src="scripts/controllers/userProfile.js"></script>
         <script src="scripts/directives/rating.js"></script>
+        <script src="scripts/directives/expandButton.js"></script>
         <script src="scripts/services/viewutils.js"></script>
         <script src="scripts/filters/timeAgoFilter.js"></script>
         <!-- endbuild -->

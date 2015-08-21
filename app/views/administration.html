@@ -1,25 +1,13 @@
-<div class="container" data-ng-model="AdministrationCtrl">
-  <tabset>
-    <tab heading="Users">
-      <div class="row">
-        <div class="col-md-12">
-          <div data-ng-include="'/views/partials/adminUsers.html'"></div>
-        </div>
-      </div>
-    </tab>
-    <tab heading="Chocolates">
-      <div class="row">
-        <div class="col-md-12">
-          <div data-ng-include="'/views/partials/adminChocolates.html'"></div>
-        </div>
-      </div>
-    </tab>
-    <tab heading="Tags">
-      <div class="row">
-        <div class="col-md-12">
-          <div data-ng-include="'/views/partials/adminTags.html'"></div>
-        </div>
-      </div>
-    </tab>
-  </tabset>
+<div data-ng-model="AdministrationCtrl">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs">
+        <li role="presentation" data-ui-sref-active="active"><a data-ui-sref="administration.chocolates"><i class="fa fa-bars"></i> <span class="hidden-xs">Chocolates</span></a></li>
+        <li role="presentation" data-ui-sref-active="active"><a data-ui-sref="administration.users"><i class="fa fa-user"></i> <span class="hidden-xs">Users</span></a></li>
+        <li role="presentation" data-ui-sref-active="active"><a data-ui-sref="administration.tags"><i class="fa fa-tags"></i> <span class="hidden-xs">Tags</span></a></li>
+        <li role="presentation" data-ui-sref-active="active"><a data-ui-sref="administration.flags"><i class="fa fa-flag"></i> <span class="hidden-xs">Flagged Reviews</span></a></li>
+      </ul>
+      <div ui-view></div>
+    </div>
+  </div>
 </div>

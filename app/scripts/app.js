@@ -24,6 +24,11 @@ angular.module('chocofireApp', [
     'ngGrid',
     'ui.utils',
     'ui.select',
+    'ui.router',
     'ngStorage',
     'angucomplete-alt'
-  ]);
+  ])
+  .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject) {
+    $scope.chocolates = $firebaseArray(Ref.child('chocolates'));
+    $scope.users = $firebaseArray(Ref.child('users'));
+  });

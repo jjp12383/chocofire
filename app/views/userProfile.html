@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="profile-thumbnail-large" style="background-image: url({{user.profile.picture}})"></div>
+      <h1>{{user.profile.firstName}} {{user.profile.lastName}}</h1>
+    </div>
+    <div class="col-md-8">
+      <h3>Reviews</h3>
+      <div data-ng-repeat="review in reviews">
+        <a href="#/listing/{{review.barId}}">{{review.maker}} - {{review.name}}</a><br />
+        <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
+        <span class="time-ago">{{review.dateTime | timeago}}</span>
+        <br />
+        <span class="review-text">"{{review.content}}"</span>
+      </div>
+    </div>
+  </div>
+</div>
