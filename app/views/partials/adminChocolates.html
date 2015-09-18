@@ -15,34 +15,83 @@
 </div>
 <div class="row btn-row">
   <div class="col-md-12">
-    <button class="btn btn-primary" data-ng-click="addChocolate()">Add Bar</button>
+    <button class="btn btn-primary" data-ng-click="addChocolate()"><i class="fa fa-plus"></i> Add A Chocolate</button>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="grid-style" data-ng-grid="gridOptions"></div>
+    <div class="grid-style" data-ui-grid="gridOptions"></div>
   </div>
 </div>
 <script type="text/ng-template" id="chocolatesModal.html">
   <div class="modal-header">
-    <h3 class="modal-title">{{action}} Bar</h3>
+    <h3 class="modal-title">{{action}} a Chocolate</h3>
   </div>
   <div class="modal-body">
-    <form role="form" class="row">
-      <div class="form-group">
-        <label class="control-label col-md-12" for="maker">
-          <input type="text" class="form-control" id="maker" placeholder="Maker" data-ng-model="bar.maker">
-        </label>
+    <div class="row">
+      <div class="col-md-12">
+        <form role="form" name="chocolateForm" id="chocolateForm" class="row">
+          <div class="form-group">
+            <label class="control-label col-md-12" for="maker">Maker
+              <input type="text" class="form-control" id="maker" name="maker" data-ng-model="bar.maker" required>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.maker.$touched">
+              <li data-ng-if="chocolateForm.maker.$error.required">Maker is required</li>
+            </ul>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-12" for="name">Name
+              <input type="text" class="form-control" id="name" name="name" data-ng-model="bar.name" required>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.name.$touched">
+              <li data-ng-if="chocolateForm.name.$error.required">Name is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Add'">
+            <label class="control-label col-md-12">Rating</label>
+            <jp-rating id="rating" class="rating" data-ng-model="bar.rating" max="10" style="margin-left: 15px"></jp-rating>
+            <ul class="errors-list" data-ng-show="noRating">
+              <li>Rating is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Add'">
+            <label class="control-label col-md-12" for="review">Review
+              <textarea id="review" name="review" class="form-control" data-ng-model="bar.review" required></textarea>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.review.$touched">
+              <li data-ng-if="chocolateForm.review.$error.required">Review is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Edit'">
+            <label class="control-label col-md-12" for="active">Is Active?
+              <select id="active" name="active" class="form-control" data-ng-model="bar.active" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+              <ul class="errors-list" data-ng-show="chocolateForm.active.$touched">
+                <li data-ng-if="chocolateForm.active.$error.required">Is Active is required</li>
+              </ul>
+            </label>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <label class="control-label col-md-12" for="name">
-          <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="bar.name">
-        </label>
-      </div>
-    </form>
+    </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">Save</button>
+    <button class="btn btn-primary" data-ng-disabled="chocolateForm.$invalid" ng-click="ok()">Save</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="chocolateDeleteModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Delete a Chocolate</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete this bar? <strong>This will delete all user reviews, and can not be undone!</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Delete</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
   </div>
 </script>

@@ -1,7 +1,9 @@
 {
   "name": "chocofire",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.13.3"
+  },
   "repository": {},
   "devDependencies": {
     "chalk": "^0.4.0",
@@ -39,5 +41,12 @@
   },
   "scripts": {
     "test": "grunt test"
-  }
+  },
+  "description": "This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular) version 1.0.0.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
 }

@@ -83,23 +83,28 @@ angular.module('chocofireApp')
         var user = $firebaseObject(Ref.child('users').child(review.userId));
         user.$loaded().then(function () {
 
-          if(review.flagged) {
-            review.flagged.push($scope.user.id);
+          if(!review.flagged) {
+            review.flagged = {};
+            review.flagged[$scope.user.id] = true;
           } else {
-            review.flagged = [$scope.user.id];
+            review.flagged[$scope.user.id] = true;
           }
 
           user.flagged = user.flagged + 1;
           user.$save();
 
+          for(var i in $scope.listing.userReviews) {
+            if($scope.listing.userReviews[i].userFlagged) {
+              delete $scope.listing.userReviews[i].userFlagged;
+            }
+          }
+
           $scope.listing.$save().then(function () {
             $timeout(function () {
-              $scope.userReviewed(review);
+              $scope.userReviewed();
             }, 100);
           });
-        })
-
-
+        });
       };
 
       $scope.deleteReview = function (review) {
@@ -138,14 +143,11 @@ angular.module('chocofireApp')
         });
       };
 
-      $scope.userReviewed = function (review) {
-        if(review.flagged !== 0) {
-          for(var i=0; i < review.flagged.length; i++) {
-            if(review.flagged[i] === $scope.user.id) {
-              $scope.listing.userReviews[review.userId].userFlagged = true;
-              break;
-            } else {
-              $scope.listing.userReviews[review.userId].userFlagged = false;
+      $scope.userReviewed = function () {
+        for(var i in $scope.listing.userReviews) {
+          if($scope.listing.userReviews[i].flagged) {
+            if($scope.listing.userReviews[i].flagged.hasOwnProperty($scope.user.id)) {
+              $scope.listing.userReviews[i].userFlagged = true;
             }
           }
         }

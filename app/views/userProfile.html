@@ -1,18 +1,95 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="profile-thumbnail-large" style="background-image: url({{user.profile.picture}})"></div>
-      <h1>{{user.profile.firstName}} {{user.profile.lastName}}</h1>
+<div class="row">
+  <div class="col-sm-4" flow-init flow-file-added="imageAdded( $file, $event, $flow )">
+    <div class="user-profile-info">
+      <button data-ng-click="editProfile('edit')" class="btn btn-sm btn-primary pull-right" data-ng-if="isUser && !editPicName"><i class="fa fa-edit"></i> Edit</button>
+      <button id="saveEditPicName" data-ng-if="editPicName" class="btn btn-sm btn-primary pull-right" data-ng-click="editProfile('save')"><i class="fa fa-check"></i> Save</button>
+      <button id="cancelEditPicName" data-ng-if="editPicName" class="btn btn-sm btn-warning pull-left" data-ng-click="editProfile('cancel')"><i class="fa fa-remove"></i> Cancel</button>
+      <div id="profilePicture" class="profile-thumbnail-large" style="background-image: url({{user.profile.picture}})"></div>
+      <span data-ng-show="editPicName" flow-btn data-ng-click="$flow.cancel()" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i> Upload Image</span>
+      <img id="imageHolder" data-ng-hide="true" flow-img="$flow.files[0]" />
+      <h1 data-ng-hide="editPicName" class="user-profile-name">{{user.profile.firstName}} {{user.profile.lastName}}</h1>
     </div>
-    <div class="col-md-8">
-      <h3>Reviews</h3>
-      <div data-ng-repeat="review in reviews">
-        <a href="#/listing/{{review.barId}}">{{review.maker}} - {{review.name}}</a><br />
-        <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
-        <span class="time-ago">{{review.dateTime | timeago}}</span>
-        <br />
-        <span class="review-text">"{{review.content}}"</span>
+    <div class="name-edit" data-ng-show="editPicName">
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="firstName">First Name</label>
+        <input id="firstName" data-ng-model="user.profile.firstName" class="form-control" type="text"/>
       </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="lastName">Last Name</label>
+        <input id="lastName" data-ng-model="user.profile.lastName" class="form-control" type="text" />
+      </div>
+    </div>
+    <form name="changePasswordForm" id="changePasswordForm" novalidate>
+      <div data-ng-if="user.profile.provider === 'email' && isUser">
+        <h3>Change Password</h3>
+        <div class="form-group">
+          <label class="control-label">Old Password</label>
+          <input type="password" id="oldPassword" name="oldPassword" data-ng-model="oldpass" class="form-control" required />
+          <ul class="errors-list" data-ng-show="changePasswordForm.oldPassword.$touched">
+            <li data-ng-if="changePasswordForm.oldPassword.$error.required">Old Password is required</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="control-label">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" data-ng-model="newpass" class="form-control" required />
+          <ul class="errors-list" data-ng-show="changePasswordForm.newPassword.$touched">
+            <li data-ng-if="changePasswordForm.newPassword.$error.required">New Password is required</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Confirm New Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" data-ng-model="confirm" class="form-control" required />
+          <ul class="errors-list" data-ng-show="changePasswordForm.confirmPassword.$touched">
+            <li data-ng-if="changePasswordForm.oldPassword.$error.required">Confirm Password is required</li>
+            <li data-ng-if="newpass !== confirm">New Password does not match the Confirm Password</li>
+          </ul>
+        </div>
+        <button data-ng-disabled="changePasswordForm.$invalid || newpass !== confirm" class="btn btn-sm btn-primary" data-ng-click="changePassword(oldpass, newpass, confirm)">Change Password</button>
+        <div ng-repeat="message in messages" class="alert alert-{{message.type}}">{{message.text}}</div>
+      </div>
+    </form>
+    <form name="changeEmailForm" id="changeEmailForm">
+      <div data-ng-if="user.profile.provider === 'email' && isUser">
+        <h3>Change Email</h3>
+        <div class="form-group">
+          <label class="control-label" for="newEmail">New Email</label>
+          <input id="newEmail" name="newEmail" type="email" data-ng-blur="blurEmail()" data-ng-focus="focusEmail()" data-ng-model="newEmail" class="form-control" required />
+          <ul class="errors-list" data-ng-show="changeEmailForm.newEmail.$touched && emailBlurred === true">
+            <li data-ng-if="changeEmailForm.newEmail.$error.required">New Email is required</li>
+            <li data-ng-if="changeEmailForm.newEmail.$error.email">Please enter a valid email address</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="password">Password</label>
+          <input id="password" name="password" type="password" data-ng-model="pass" class="form-control" required />
+          <ul class="errors-list" data-ng-show="changeEmailForm.password.$touched">
+            <li data-ng-if="changeEmailForm.password.$error.required">Password is required</li>
+          </ul>
+        </div>
+        <button data-ng-disabled="changeEmailForm.$invalid" class="btn btn-sm btn-primary" data-ng-click="changeEmail(pass, newEmail)">Update Email</button>
+      </div>
+    </form>
+  </div>
+  <div class="col-sm-8">
+    <button class="btn btn-sm btn-warning pull-right" data-ng-if="isUser" data-ng-click="logout()"><i class="fa fa-power-off"></i> Log Out</button>
+    <h3 class="reviews-header">Reviews</h3>
+    <div data-ng-repeat="review in reviews" class="user-review">
+      <a href="#/listing/{{review.barId}}">{{review.maker}} - {{review.name}}</a><br />
+      <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
+      <span class="time-ago">{{review.dateTime | timeago}}</span>
+      <br />
+      <span class="review-text">"{{review.content}}"</span>
     </div>
   </div>
 </div>
+<script type="text/ng-template" id="myProfileModal.html">
+  <div class="modal-header">
+    <h4><i class="fa" data-ng-class="{'fa-warning': type === 'Error', 'fa-check': type === 'Success'}"></i> {{type}}</h4>
+  </div>
+  <div class="modal-body">
+    <p>{{message}}</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-ng-click="cancel()">OK</button>
+  </div>
+</script>

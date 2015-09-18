@@ -21,12 +21,16 @@ angular.module('chocofireApp', [
     'firebase.ref',
     'firebase.auth',
     'ui.bootstrap',
-    'ngGrid',
+    'ui.grid',
     'ui.utils',
     'ui.select',
     'ui.router',
     'ngStorage',
-    'angucomplete-alt'
+    'angucomplete-alt',
+    'angularSpinner',
+    'ui.scroll',
+    'ui.scroll.jqlite',
+    'flow'
   ])
   .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject) {
     $scope.chocolates = $firebaseArray(Ref.child('chocolates'));

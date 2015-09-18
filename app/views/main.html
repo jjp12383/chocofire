@@ -1,10 +1,116 @@
-<div angucomplete-alt id="ex1"
-     placeholder="Search bars"
-     pause="100"
-     selected-object="selectedChocolate"
-     local-data="chocolates"
-     search-fields="name,maker"
-     description-field="maker"
-     title-field="name"
-     minlength="2"
-     input-class="form-control"></div>
+<div class="row">
+  <div class="col-md-12">
+    <div angucomplete-alt id="ex1"
+         placeholder="Search bars"
+         pause="100"
+         selected-object="selectedChocolate"
+         local-data="chocolates"
+         search-fields="name,maker"
+         description-field="maker"
+         title-field="name"
+         minlength="2"
+         input-class="form-control"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <pagination previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" data-ng-change="pageChanged()" total-items="chocolates.length" data-ng-model="currentPage" items-per-page="maxItems" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
+    <button style="margin-top: 17px" class="pull-right btn btn-primary" data-ng-click="addChocolate()"><i class="fa fa-plus"></i><span class="hidden-xs"> Add A Chocolate</span></button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <span us-spinner spinner-key="spinner-1"></span>
+    <div class="main-chocolate-list-container">
+      <div class="main-chocolate-list">
+        <div class="main-chocolate-list-body">
+          <div class="main-chocolate-list-row">
+            <div class="main-chocolate-list-header-cell" data-ng-click="order('maker')">
+              Maker
+              <span class="sortorder" ng-show="predicate === 'maker'" ng-class="{reverse:reverse}"></span>
+            </div>
+            <div class="main-chocolate-list-header-cell"  data-ng-click="order('name')">
+              Name
+              <span class="sortorder" ng-show="predicate === 'name'" ng-class="{reverse:reverse}"></span>
+            </div>
+            <div class="main-chocolate-list-header-cell"  data-ng-click="order('rating')">
+              Average Rating
+              <span class="sortorder" ng-show="predicate === 'rating'" ng-class="{reverse:reverse}"></span>
+            </div>
+          </div>
+          <div class="main-chocolate-list-row" data-ng-repeat="chocolate in chocoArray | orderBy:predicate:reverse | filter:{active:'true'}" on-finish-render>
+            <div class="main-chocolate-list-cell">
+              <label class="table-label visible-sm-inline-block visible-xs-inline-block">Maker:</label> {{chocolate.maker}}
+            </div>
+            <div class="main-chocolate-list-cell">
+              <label class="table-label visible-sm-inline-block visible-xs-inline-block">Name:</label> <a href="#/listing/{{chocolate.$id}}">{{chocolate.name}}</a>
+            </div>
+            <div class="main-chocolate-list-cell">
+              <label class="table-label visible-sm-inline-block visible-xs-inline-block">Rating:</label> {{chocolate.rating}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="chocolatesModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title">{{action}} a Chocolate</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <form role="form" name="chocolateForm" id="chocolateForm" class="row">
+          <div class="form-group">
+            <label class="control-label col-md-12" for="maker">Maker
+              <input type="text" class="form-control" id="maker" name="maker" data-ng-model="bar.maker" required>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.maker.$touched">
+              <li data-ng-if="chocolateForm.maker.$error.required">Maker is required</li>
+            </ul>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-12" for="name">Name
+              <input type="text" class="form-control" id="name" name="name" data-ng-model="bar.name" required>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.name.$touched">
+              <li data-ng-if="chocolateForm.name.$error.required">Name is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Add'">
+            <label class="control-label col-md-12">Rating</label>
+            <jp-rating id="rating" class="rating" data-ng-model="bar.rating" max="10" style="margin-left: 15px"></jp-rating>
+            <ul class="errors-list" data-ng-show="noRating">
+              <li>Rating is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Add'">
+            <label class="control-label col-md-12" for="review">Review
+              <textarea id="review" name="review" class="form-control" data-ng-model="bar.review" required></textarea>
+            </label>
+            <ul class="errors-list" data-ng-show="chocolateForm.review.$touched">
+              <li data-ng-if="chocolateForm.review.$error.required">Review is required</li>
+            </ul>
+          </div>
+          <div class="form-group" data-ng-if="action === 'Edit'">
+            <label class="control-label col-md-12" for="active">Is Active?
+              <select id="active" name="active" class="form-control" data-ng-model="bar.active" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+              <ul class="errors-list" data-ng-show="chocolateForm.active.$touched">
+                <li data-ng-if="chocolateForm.active.$error.required">Active required</li>
+              </ul>
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-ng-disabled="chocolateForm.$invalid" ng-click="ok()">Save</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>
+</script>

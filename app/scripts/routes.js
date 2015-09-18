@@ -123,6 +123,11 @@ angular.module('chocofireApp')
         templateUrl: 'views/userProfile.html',
         controller: 'UserProfileCtrl'
       })
+      .state('about', {
+        url: '/about',
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl'
+      })
   }])
   // configure views; whenAuthenticated adds a resolve method to ensure users authenticate
   // before trying to access that route

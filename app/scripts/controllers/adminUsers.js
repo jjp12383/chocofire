@@ -1,104 +1,71 @@
 angular.module('chocofireApp')
-  .controller('AdminUsersCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, $timeout, $modal, $location, $localStorage) {
+  .controller('AdminUsersCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, $timeout, User, $modal, uiGridConstants) {
 
-    $scope.user = $localStorage.$default();
-
+    $scope.user = User.getLocalUser();
+    $scope.users = User.getUsers();
     $scope.userOptions = {
       data: 'users',
-      showGroupPanel: true,
-      enableCellSelection: false,
-      enableRowSelection: false,
-      enableCellEdit: false,
-      rowHeight: 35,
-      sortInfo: {
-        fields: ['name'],
-        directions: ['asc']
+      onRegisterApi: function(gridApi){
+        $scope.gridApi = gridApi;
       },
+      rowHeight: 35,
+      enableFiltering: true,
       columnDefs: [
         {
-          field: 'name',
+          field: 'profile.firstName',
           displayName: 'Name',
-          enableCellEdit: false,
-          cellTemplate: '<div><div class="ngCellText"><a href="#/userProfile/{{row.entity.$id}}">{{row.getProperty(col.field)}}</a></div></div>'
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><a href="#/userProfile/{{row.entity.$id}}">{{grid.getCellValue(row, col)}}</a></div></div>'
         },
         {
           field: 'email',
-          displayName: 'Email',
-          enableCellEdit: false
+          displayName: 'Email'
         },
         {
           field: 'role',
           displayName: 'Role',
-          enableCellEdit: false,
-          width: 100
+          width: 100,
+          cellClass: 'center-cell',
+          filter:
+          {
+            type: uiGridConstants.filter.SELECT,
+            selectOptions: [ {value: 1, label: 'User'}, {value: 75, label: 'Moderator'}, {value: 99, label: 'Admin'} ],
+            disableCancelFilterButton: true
+          },
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><span data-ng-if="grid.getCellValue(row, col) === 1">User</span><span data-ng-if="grid.getCellValue(row, col) === 75">Moderator</span><span data-ng-if="grid.getCellValue(row, col) === 99">Admin</span></div></div>'
+        },
+        {
+          field: 'active',
+          displayName: 'Is Active?',
+          width: 100,
+          filter:
+          {
+            type: uiGridConstants.filter.SELECT,
+            selectOptions: [ {value: true, label: 'Yes'}, {value: false, label: 'No'} ],
+            disableCancelFilterButton: true
+          },
+          cellClass: 'center-cell',
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><span data-ng-if="grid.getCellValue(row, col) === &apos;true&apos;">Yes</span><span data-ng-if="grid.getCellValue(row, col) === &apos;false&apos;">No</span></div></div>'
         },
         {
           field: 'edit',
           displayName: '',
-          cellTemplate: '<div><div class="ngCellText"><button class="btn btn-xs btn-primary" data-ng-click="editUser(row.entity)"><i class="fa fa-edit"></i></button></div></div>',
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><button class="btn btn-xs btn-primary" data-ng-click="grid.appScope.editUser(row.entity)"><i class="fa fa-edit"></i></button></div></div>',
+          width: 35,
+          enableSorting: false,
+          enableFiltering: false,
+          enableColumnMenu: false,
+        },
+        {
+          field: 'delete',
+          displayName: '',
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><button class="btn btn-xs btn-warning" data-ng-click="grid.appScope.disableUser(row.entity)"><i class="fa fa-trash"></i></button></div></div>',
           enableCellEdit: false,
-          groupable: false,
-          sortable: false,
+          enableSorting: false,
+          enableFiltering: false,
+          enableColumnMenu: false,
           width: 35
         }
       ]
-    };
-
-    $scope.createAccount = function() {
-      var enteredUser = {
-          role: null,
-          emailOld: null,
-          emailNew: null,
-          name: null,
-          pass: null
-        },
-        modalInstance = $modal.open({
-          templateUrl: 'usersModal.html',
-          controller: 'UsermodalCtrl',
-          resolve: {
-            user: function () {
-              return {
-                emailOld: null,
-                emailNew: null,
-                pass: null,
-                confirm: null,
-                role: null,
-                name: null
-              };
-            },
-            action: function () {
-              return 'Add';
-            }
-          }
-        });
-
-      modalInstance.result.then(function (user) {
-        enteredUser = {
-          role: user.role,
-          name: user.name,
-          email: user.emailOld,
-          pass: user.pass
-        };
-        Auth.$createUser({email: enteredUser.email, password: enteredUser.pass})
-          .then(createProfile);
-      });
-
-      function createProfile(user) {
-        var ref = Ref.child('users').child(user.uid),
-          def = $q.defer();
-
-        ref.set({email: enteredUser.email, name: enteredUser.name, role: enteredUser.role}, function(err) {
-          $timeout(function() {
-            if( err ) {
-              def.reject(err);
-            }
-            else {
-              def.resolve(ref);
-            }
-          });
-        });
-        return def.promise;
-      }
     };
 
     $scope.editUser = function (user) {
@@ -107,38 +74,41 @@ angular.module('chocofireApp')
         controller: 'UsermodalCtrl',
         resolve: {
           user: function () {
-            return {
-              id: user.$id,
-              role: user.role,
-              name: user.name
-            };
-          },
-          action: function () {
-            return 'Edit';
+            return user;
           }
         }
       });
-      modalInstance.result.then(function (user) {
-        createProfile(user);
+      modalInstance.result.then(function (userId) {
+        var user = $firebaseObject(Ref.child('users').child(userId.id));
+        user.active = userId.active;
+        user.email = userId.email;
+        user.flagged = userId.flagged;
+        user.profile = userId.profile;
+        user.role = Number(userId.role);
+        user.$save();
       });
+    };
 
-      function createProfile(user) {
-        var ref = Ref.child('users').child(user.id),
-          def = $q.defer();
-
-        ref.update({name: user.name, role: user.role}, function(err) {
-          $timeout(function() {
-            if( err ) {
-              def.reject(err);
-            }
-            else {
-              def.resolve(ref);
-            }
-          });
-        });
-        return def.promise;
-      }
-    }
+    $scope.disableUser = function (user) {
+      var modalInstance = $modal.open({
+        templateUrl: 'disableUserModal.html',
+        controller: 'UserDisablemodalCtrl',
+        resolve: {
+          user: function () {
+            return user
+          }
+        }
+      });
+      modalInstance.result.then(function (userId) {
+        var user = $firebaseObject(Ref.child('users').child(userId.$id));
+        user.active = "false";
+        user.email = userId.email;
+        user.flagged = userId.flagged;
+        user.profile = userId.profile;
+        user.role = userId.role;
+        user.$save();
+      });
+    };
 
     function showError(err) {
       $scope.err = err;

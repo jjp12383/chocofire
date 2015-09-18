@@ -6,17 +6,17 @@
     </div>
     <div data-ng-repeat="review in reviews" class="user-review">
       <a class="user-link" href="#/userProfile/{{review.userId}}">{{review.user}}</a>
-      <a href="#/listing/{{review.barId}}">{{review.maker}} - {{review.name}}</a>
-      <button expand-button data-ng-click="clearFlags()" class="btn btn-warning btn-responsive btn-xs report-review-button flag-counter">
+      <a class="chocolate-link" href="#/listing/{{review.barId}}">{{review.maker}} - {{review.name}}</a>
+      <button expand-button data-ng-click="clearFlagsReview(review)" class="btn btn-warning btn-responsive btn-xs report-review-button flag-counter">
         <i class="fa fa-flag"></i>
-        <span class="flag-counter-text">{{review.flagged.length}}</span>
+        <span class="flag-counter-text">{{review.count}}</span>
         <span class="flag-clear-text">Clear Flags?</span>
       </button>
       <br />
       <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
       <span class="time-ago">{{review.dateTime | timeago}}</span>
       <br />
-      <span class="review-text">"{{review.content}}"</span>
+      <div class="review-text">"{{review.content}}"</div>
     </div>
   </div>
   <div class="col-md-6">
@@ -26,7 +26,7 @@
     </div>
     <div data-ng-repeat="user in users | filter: greaterThan('flagged', 0)">
       <a class="user-link" href="#/userProfile/{{user.$id}}">{{user.name}}</a>
-      <button expand-button class="btn btn-warning btn-responsive btn-xs report-review-button flag-counter">
+      <button expand-button data-ng-click="clearFlagsUser(user.$id)" class="btn btn-warning btn-responsive btn-xs report-review-button flag-counter">
         <i class="fa fa-flag"></i>
         <span class="flag-counter-text">{{user.flagged}}</span>
         <span class="flag-clear-text">Clear Flags?</span>

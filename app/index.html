@@ -8,7 +8,6 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/ng-grid/ng-grid.css" />
     <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
@@ -16,6 +15,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/ui-grid.min.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -28,7 +28,7 @@
 
     <!-- Add your site or application content here -->
     <div class="header" ng-cloak="">
-      <div class="navbar navbar-default" role="navigation">
+      <div class="navbar navbar-default" role="navigation" data-ng-controller="NavCtrl">
         <div class="container">
           <div class="navbar-header">
 
@@ -46,9 +46,17 @@
 
             <ul class="nav navbar-nav">
               <li data-ui-sref-active="active"><a data-ui-sref="home">Home</a></li>
-              <li data-ng-if="user.role === 99" data-ui-sref-active="active"><a data-ui-sref="administration.chocolates">Administration</a></li>
+              <li data-ng-if="user.role === 99" data-ui-sref-active="active" ng-show-auth><a data-ui-sref="administration.chocolates">Administration</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
               <li ng-hide-auth="" data-ui-sref-active="active"><a data-ui-sref="login">log In</a></li>
-              <li ng-show-auth="" data-ui-sref-active="active"><a data-ui-sref="account">Account</a></li>
+              <li ng-show-auth="" data-ui-sref-active="active">
+                <a href="#/userProfile/{{user.id}}" class="profile-link">
+                  My Account
+                  <div class="profile-thumbnail-small" style="background-image: url({{user.picture}})"></div>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -86,7 +94,6 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/ng-grid/build/ng-grid.js"></script>
     <script src="bower_components/ui-utils/ui-utils.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/ngstorage/ngStorage.js"></script>
@@ -94,6 +101,10 @@
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+    <script src="bower_components/flow.js/dist/flow.js"></script>
+    <script src="bower_components/ng-flow/dist/ng-flow.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -120,11 +131,18 @@
         <script src="scripts/controllers/adminTags.js"></script>
         <script src="scripts/controllers/adminFlags.js"></script>
         <script src="scripts/controllers/listing.js"></script>
+        <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/nav.js"></script>
         <script src="scripts/controllers/userProfile.js"></script>
         <script src="scripts/directives/rating.js"></script>
         <script src="scripts/directives/expandButton.js"></script>
+        <script src="scripts/directives/repeatComplete.js"></script>
+        <script src="scripts/directives/infiniteScroll.js"></script>
         <script src="scripts/services/viewutils.js"></script>
+        <script src="scripts/services/chocolateService.js"></script>
+        <script src="scripts/services/userService.js"></script>
         <script src="scripts/filters/timeAgoFilter.js"></script>
+        <script src="scripts/ui-grid.min.js"></script>
         <!-- endbuild -->
 </body>
 </html>
