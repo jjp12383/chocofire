@@ -1,4 +1,4 @@
 angular.module('chocofireApp')
-  .controller('AboutCtrl', function ($scope, user, Auth, Ref, $firebaseObject, $firebaseArray, $timeout, $rootScope, $localStorage) {
+  .controller('AboutCtrl', function ($scope, Auth, Ref, $firebaseObject, $firebaseArray, $timeout, $rootScope, $localStorage) {
 
   });

@@ -32,7 +32,15 @@ angular.module('chocofireApp', [
     'ui.scroll.jqlite',
     'flow'
   ])
-  .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject) {
-    $scope.chocolates = $firebaseArray(Ref.child('chocolates'));
-    $scope.users = $firebaseArray(Ref.child('users'));
+  .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject, $timeout) {
+    $timeout(function () {
+      var navLink = angular.element(document.querySelectorAll('.nav a'));
+      var navToggle = angular.element(document.querySelectorAll('.navbar-toggle'));
+      var navCollapse = angular.element(document.querySelectorAll('.navbar-collapse'));
+      navLink.on('click', function () {
+        if(navCollapse.hasClass('in')) {
+          navToggle.click();
+        }
+      });
+    }, 50);
   });

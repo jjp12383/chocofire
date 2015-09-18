@@ -603,8 +603,8 @@ input.ng-invalid.ng-touched {
   background-color: #5f554c;
 }
 
-.user-review .flag-counter {
-  margin-left: 10px;
+.flag-counter {
+  margin-bottom: 10px;
 }
 
 .errors-list {

@@ -2,9 +2,10 @@ angular.module('chocofireApp')
   .controller('AdminChocolatesCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, User, Chocolate, $timeout, $modal, $location, $localStorage, uiGridConstants) {
 
     $scope.chocolates = Chocolate.getChocolates();
+
     $scope.gridOptions = {
       data: 'chocolates',
-      onRegisterApi: function(gridApi){
+      onRegisterApi: function (gridApi) {
         $scope.gridApi = gridApi;
       },
       rowHeight: 35,
@@ -32,14 +33,28 @@ angular.module('chocofireApp')
           field: 'rating',
           displayName: 'Rating',
           width: 100,
-          cellClass: 'center-cell'
+          cellClass: 'center-cell',
+          filter: {
+            condition: uiGridConstants.filter.EXACT
+          }
         },
         {
           field: 'active',
-          displayName: 'Is Active?',
+          displayName: 'Is Active',
           width: 100,
-          filter:
-          {
+          filter: {
+            type: uiGridConstants.filter.SELECT,
+            selectOptions: [ {value: true, label: 'Yes'}, {value: false, label: 'No'} ],
+            disableCancelFilterButton: true
+          },
+          cellClass: 'center-cell',
+          cellTemplate: '<div><div class="ui-grid-cell-contents"><span data-ng-if="grid.getCellValue(row, col) === &apos;true&apos;">Yes</span><span data-ng-if="grid.getCellValue(row, col) === &apos;false&apos;">No</span></div></div>'
+        },
+        {
+          field: 'hasALink',
+          displayName: 'Has A-Link?',
+          width: 120,
+          filter: {
             type: uiGridConstants.filter.SELECT,
             selectOptions: [ {value: true, label: 'Yes'}, {value: false, label: 'No'} ],
             disableCancelFilterButton: true
@@ -74,7 +89,7 @@ angular.module('chocofireApp')
     };
 
     $scope.addChocolate = function () {
-      Chocolate.addChocolate();
+      Chocolate.addChocolate('admin');
       $scope.gridApi.grid.refresh()
     };
 

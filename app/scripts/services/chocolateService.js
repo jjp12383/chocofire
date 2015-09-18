@@ -8,7 +8,7 @@ angular.module('chocofireApp')
       return chocolates;
     };
 
-    chocolateFunctions.addChocolate = function() {
+    chocolateFunctions.addChocolate = function(role) {
       var user = User.getLocalUser();
       var chocolates = chocolateFunctions.getChocolates();
 
@@ -21,8 +21,11 @@ angular.module('chocofireApp')
               _id: null
             };
           },
+          role: function () {
+            return role;
+          },
           action: function () {
-            return 'Add';
+            return 'Add'
           }
         }
       });
@@ -32,7 +35,10 @@ angular.module('chocofireApp')
           name: bar.name,
           rating: bar.rating,
           review: bar.review,
-          active: "true"
+          active: "true",
+          amazonLink: "false",
+          amazonImage: "false",
+          hasALink: "false"
         }).then(function(ref) {
           var id = ref.key(),
             userReviews = {},
@@ -62,6 +68,9 @@ angular.module('chocofireApp')
           bar: function () {
             return bar;
           },
+          role: function () {
+            return 'admin';
+          },
           action: function () {
             return 'Edit';
           }
@@ -75,6 +84,9 @@ angular.module('chocofireApp')
         bar.rating = chocolate.rating;
         bar.review = chocolate.review;
         bar.active = chocolate.active;
+        bar.amazonImage = chocolate.amazonImage;
+        bar.amazonLink = chocolate.amazonLink;
+        bar.hasALink = chocolate.hasALink;
         bar.userReviews = reviews;
         bar.$save();
       });

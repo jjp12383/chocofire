@@ -85,7 +85,7 @@ angular.module('chocofireApp')
       });
 
       $scope.addChocolate = function () {
-        Chocolate.addChocolate();
+        Chocolate.addChocolate('user');
       }
     });
   });

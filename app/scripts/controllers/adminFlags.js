@@ -1,9 +1,15 @@
 angular.module('chocofireApp')
-  .controller('AdminFlagsCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, $timeout, $modal, $location, $localStorage) {
+  .controller('AdminFlagsCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, Chocolate, User, $timeout, $modal, $location, $localStorage) {
 
     var reviews = [];
 
-    $scope.chocolates.$loaded().then(function () {
+    var chocolates = Chocolate.getChocolates();
+    var users = User.getUsers();
+
+    chocolates.$loaded().then(function () {
+
+      $scope.chocolates = chocolates;
+      $scope.users = users;
 
       function findFlags() {
         for(var i in $scope.chocolates) {
@@ -87,9 +93,9 @@ angular.module('chocofireApp')
           if($scope.users[u].$id === user) {
             var user = $firebaseObject(Ref.child('users').child(user));
             user.email = $scope.users[u].email;
+            user.active = $scope.users[u].active;
             user.flagged = 0;
             user.profile = $scope.users[u].profile;
-            user.name = $scope.users[u].name;
             user.role = $scope.users[u].role;
             user.$save();
             $scope.users[u].flagged = 0;
