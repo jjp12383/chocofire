@@ -7,7 +7,9 @@
  * Manages authentication to any active providers.
  */
 angular.module('chocofireApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location, $q, Ref, $timeout, $rootScope, $firebaseObject, $localStorage) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $q, Ref, $timeout, $rootScope, $firebaseObject, $localStorage, $modal) {
+
+    $scope.alerts = [];
 
     $scope.oauthLogin = function(provider) {
       $scope.err = null;
@@ -21,6 +23,23 @@ angular.module('chocofireApp')
         remember: "sessiononly",
         scope: emailAsk
       }).then(handleOAuth, showError);
+    };
+
+    $scope.resetPassword = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'resetPasswordModal.html',
+        controller: 'ResetPassmodalCtrl'
+      });
+      modalInstance.result.then(function (email) {
+        Auth.$resetPassword({
+          email: email
+        }).then(function() {
+          $scope.alerts.push({type: 'success', msg: 'Success! An email has been sent to your address with a temporary password. Make sure to log in and reset your password as soon as possible.'});
+          $timeout(function () {
+            $scope.alerts = [];
+          }, 7000);
+        });
+      });
     };
 
     $scope.anonymousLogin = function() {
@@ -65,9 +84,7 @@ angular.module('chocofireApp')
           firstName: user.profile.first_name ? user.profile.first_name : user.profile.given_name,
           lastName: user.profile.last_name ? user.profile.last_name : user.profile.family_name,
           name: user.profile.name,
-          gender: user.profile.gender,
           id: user.profile.id,
-          link: user.profile.link,
           locale: user.profile.locale,
           picture: user.profile.picture.data ? user.profile.picture.data.url : user.profile.picture
         }
@@ -161,5 +178,27 @@ angular.module('chocofireApp')
       $scope.err = err;
     }
 
+    if($rootScope.pleaseLogIn !== undefined) {
+      var modalInstance = $modal.open({
+        templateUrl: 'pleaseLogInModal.html',
+        controller: 'LoginmodalCtrl'
+      });
+      modalInstance.result.then(function () {
+        $rootScope.pleaseLogIn = null;
+      });
+    }
+  })
+  .controller('LoginmodalCtrl', function ($scope, $modalInstance) {
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  })
+  .controller('ResetPassmodalCtrl', function ($scope, $modalInstance) {
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
 
+    $scope.ok = function () {
+      $modalInstance.close($scope.email);
+    }
   });

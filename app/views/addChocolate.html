@@ -1,0 +1,86 @@
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<span us-spinner spinner-key="spinner-1" class="hide"></span>
+<form role="form" name="chocolateForm" id="chocolateForm" ng-submit="addChocolate()" novalidate class="page-content" data-ng-class="{'show': showContent}">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="maker">Maker</label>
+        <input type="text" class="form-control" id="maker" name="maker" data-ng-model="bar.maker" required />
+        <ul class="errors-list" data-ng-show="chocolateForm.maker.$touched">
+          <li data-ng-if="chocolateForm.maker.$error.required">Maker is required</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" data-ng-model="bar.name" required />
+        <ul class="errors-list" data-ng-show="chocolateForm.name.$touched">
+          <li data-ng-if="chocolateForm.name.$error.required">Name is required</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="review">Review</label>
+        <textarea id="review" name="review" class="form-control" data-ng-model="bar.review" required></textarea>
+        <ul class="errors-list" data-ng-show="chocolateForm.review.$touched">
+          <li data-ng-if="chocolateForm.review.$error.required">Review is required</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">Rating</label>
+        <br />
+        <jp-rating id="rating" class="rating" data-ng-model="bar.rating" max="10"></jp-rating>
+        <ul class="errors-list" data-ng-show="noRating">
+          <li>Rating is required</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-show-auth="" data-ng-if="role === 'admin'">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="amazonLink">Amazon Link</label>
+        <input type="text" class="form-control" id="amazonLink" name="amazonLink" data-ng-model="bar.amazonLink" />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="amazonImage">Amazon Image</label>
+        <input type="text" class="form-control" id="amazonImage" name="amazonImage" data-ng-model="bar.amazonImage" />
+      </div>
+    </div>
+  </div>
+  <!--<div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="scan">Scan Barcode</label>
+        <a data-ng-href="{{scanUrl}}" class="btn btn-primary scan-barcode" id="scan"><i class="fa fa-camera"></i></a>
+      </div>
+    </div>
+  </div>-->
+  <!--<div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="scan">Scan Barcode</label>
+        <button data-ng-click="scanCode()" class="btn btn-primary scan-barcode" id="scan"><i class="fa fa-camera"></i></button>
+      </div>
+    </div>
+  </div>
+  <div id="code"></div>
+  <div>
+    <div id="interactive" class="viewport"></div>
+  </div>-->
+  <div class="row">
+    <div class="col-md-12">
+      <input type="submit" class="btn btn-primary" data-ng-disabled="chocolateForm.$invalid" value="Save" />
+      <button class="btn btn-warning" data-ng-click="clearForm()">Reset</button>
+      <button class="btn btn-warning" data-ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+</form>

@@ -7,18 +7,42 @@
  * Controller of the chocofireApp
  */
 angular.module('chocofireApp')
-  .controller('ListingCtrl', function ($scope, Auth, Ref, $stateParams, $firebaseObject, $firebaseArray, $timeout, $modal, $localStorage, $location, viewUtils) {
+  .controller('ListingCtrl', function ($scope, pageContent, Auth, Ref, $stateParams, $firebaseObject, $firebaseArray, $timeout, $modal, $localStorage, $state, $rootScope, usSpinnerService) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
+
+    var spin = function () {
+      usSpinnerService.spin('spinner-1');
+      $scope.spinneractive = true;
+    };
+
+    $timeout(function(){
+      spin()
+    });
+
+    $rootScope.$on('us-spinner:spin', function(event, key) {
+      $scope.spinneractive = true;
+    });
+
+    $rootScope.$on('us-spinner:stop', function(event, key) {
+      $scope.spinneractive = false;
+    });
+
+    $scope.authObject = Auth.$getAuth();
     var listingId = $stateParams.id;
-    var bar = $firebaseObject(Ref.child('chocolates').child(listingId));
-    //Load data from DB
-    bar.$loaded().then(function () {
+
+    pageContent.get(function () {
+      var bar = $firebaseObject(Ref.child('chocolates').child(listingId));
+      return bar.$loaded();
+    }).then(function (bar) {
+
+      usSpinnerService.stop('spinner-1');
+
       var totalReviews = 0,
-          reviews
+        reviews
 
       $scope.listing = bar;
       //Retrieve current user
@@ -46,36 +70,42 @@ angular.module('chocofireApp')
 
       //UI: User leaves or edits review
       $scope.leaveReview = function () {
-        if($scope.reviewText) {
-          var data = {
-            barId: listingId,
-            maker: $scope.listing.maker,
-            name: $scope.listing.name,
-            flagged: 0,
-            content: $scope.reviewText,
-            rating: $scope.rating,
-            dateTime: Firebase.ServerValue.TIMESTAMP,
-            user: $scope.user.firstName,
-            userId: $scope.user.id
-          };
 
-          $scope.listing.userReviews[$scope.user.id] = data;
-          bar.$save().then(function () {
-            var counter = 0,
-              rating = 0;
-            for(var i in bar.userReviews) {
-              rating += Number(bar.userReviews[i].rating);
-              counter += 1;
-            }
-            bar.rating = round(rating / counter);
+        if($scope.authObject !== null) {
+          if($scope.reviewText) {
+            var data = {
+              barId: listingId,
+              maker: $scope.listing.maker,
+              name: $scope.listing.name,
+              flagged: 0,
+              content: $scope.reviewText,
+              rating: $scope.rating,
+              dateTime: Firebase.ServerValue.TIMESTAMP,
+              user: $scope.user.firstName,
+              userId: $scope.user.id
+            };
+
+            $scope.listing.userReviews[$scope.user.id] = data;
             bar.$save().then(function () {
-              buildRatingPopover();
+              var counter = 0,
+                rating = 0;
+              for(var i in bar.userReviews) {
+                rating += Number(bar.userReviews[i].rating);
+                counter += 1;
+              }
+              bar.rating = round(rating / counter);
+              bar.$save().then(function () {
+                buildRatingPopover();
+              });
             });
-          });
+          }
+          //Refresh view by rerunning the checkArray function and updating scope
+          $scope.reviewText = '';
+          checkArray();
+        } else {
+          $rootScope.pleaseLogIn = true;
+          $state.go('login');
         }
-        //Refresh view by rerunning the checkArray function and updating scope
-        $scope.reviewText = '';
-        checkArray();
       }
 
       $scope.reportReview = function (review) {
@@ -213,6 +243,5 @@ angular.module('chocofireApp')
       }
 
       buildRatingPopover();
-
     });
   });

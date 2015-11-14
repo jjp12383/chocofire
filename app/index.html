@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="styles/ui-grid.min.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <style>
+      [ng\:cloak], [ng-cloak], .ng-cloak { display: none; }
+    </style>
   </head>
   <body ng-app="chocofireApp" data-ng-controller="RunCtrl">
     <div class="gradient-bg gradient"></div>
@@ -53,7 +57,7 @@
               <li ng-hide-auth="" data-ui-sref-active="active"><a data-ui-sref="login">log In</a></li>
               <li ng-show-auth="" data-ui-sref-active="active">
                 <a href="#/userProfile/{{user.id}}" class="profile-link">
-                  My Account
+                  <span class="hidden-sm">My Account</span>
                   <div class="profile-thumbnail-small" style="background-image: url({{user.picture}})"></div>
                 </a>
               </li>
@@ -63,8 +67,14 @@
       </div>
     </div>
 
-    <div class="container main">
-    <div ui-view=""></div>
+    <div class="container main" main-container>
+      <div ui-view=""></div>
+    </div>
+    <div class="footer">
+      <div class="container">
+        <span class="pull-left">Chocoverse &copy;</span>
+        <span class="pull-right"><i class="fa fa-envelope"></i> <a href="mailto:scottbillups99@gmail.com">Contact Us!</a></span>
+      </div>
     </div>
 
 
@@ -105,6 +115,8 @@
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="bower_components/flow.js/dist/flow.js"></script>
     <script src="bower_components/ng-flow/dist/ng-flow.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <script src="bower_components/restangular/dist/restangular.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -134,13 +146,21 @@
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/nav.js"></script>
         <script src="scripts/controllers/userProfile.js"></script>
+        <script src="scripts/controllers/addChocolateCtrl.js"></script>
+        <script src="scripts/controllers/editChocolateCtrl.js"></script>
+        <script src="scripts/controllers/scannedChocolateCtrl.js"></script>
         <script src="scripts/directives/rating.js"></script>
         <script src="scripts/directives/expandButton.js"></script>
         <script src="scripts/directives/repeatComplete.js"></script>
         <script src="scripts/directives/infiniteScroll.js"></script>
+        <script src="scripts/directives/mainContainerDirective.js"></script>
+        <script src="scripts/directives/mainChocolateListDirective.js"></script>
+        <script src="scripts/directives/backImageDirective.js"></script>
+        <script src="scripts/directives/pageContentDirective.js"></script>
         <script src="scripts/services/viewutils.js"></script>
         <script src="scripts/services/chocolateService.js"></script>
         <script src="scripts/services/userService.js"></script>
+        <script src="scripts/services/pageContentService.js"></script>
         <script src="scripts/filters/timeAgoFilter.js"></script>
         <script src="scripts/ui-grid.min.js"></script>
         <!-- endbuild -->

@@ -30,9 +30,10 @@ angular.module('chocofireApp', [
     'angularSpinner',
     'ui.scroll',
     'ui.scroll.jqlite',
-    'flow'
+    'flow',
+    'restangular'
   ])
-  .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject, $timeout) {
+  .controller('RunCtrl', function($scope, Ref, $firebaseArray, $firebaseObject, $timeout, $rootScope) {
     $timeout(function () {
       var navLink = angular.element(document.querySelectorAll('.nav a'));
       var navToggle = angular.element(document.querySelectorAll('.navbar-toggle'));
@@ -43,4 +44,32 @@ angular.module('chocofireApp', [
         }
       });
     }, 50);
+
+    $rootScope.previousState;
+    $rootScope.currentState;
+    $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+      //Quagga.stop();
+      $rootScope.previousState = from.name;
+      $rootScope.currentState = to.name;
+    });
+
+    function iOS() {
+
+      var iDevices = [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+      ];
+
+      while (iDevices.length) {
+        if (navigator.platform === iDevices.pop()){ return true; }
+      }
+
+      return false;
+    }
+
+    $rootScope.isIos = iOS();
   });

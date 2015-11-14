@@ -5,7 +5,7 @@
       <button id="saveEditPicName" data-ng-if="editPicName" class="btn btn-sm btn-primary pull-right" data-ng-click="editProfile('save')"><i class="fa fa-check"></i> Save</button>
       <button id="cancelEditPicName" data-ng-if="editPicName" class="btn btn-sm btn-warning pull-left" data-ng-click="editProfile('cancel')"><i class="fa fa-remove"></i> Cancel</button>
       <div id="profilePicture" class="profile-thumbnail-large" style="background-image: url({{user.profile.picture}})"></div>
-      <span data-ng-show="editPicName" flow-btn data-ng-click="$flow.cancel()" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i> Upload Image</span>
+      <span data-ng-show="editPicName" flow-btn data-ng-click="$flow.cancel()" class="btn btn-sm btn-primary hidden-sm hidden-xs"><i class="fa fa-upload"></i> Upload Image</span>
       <img id="imageHolder" data-ng-hide="true" flow-img="$flow.files[0]" />
       <h1 data-ng-hide="editPicName" class="user-profile-name">{{user.profile.firstName}} {{user.profile.lastName}}</h1>
     </div>

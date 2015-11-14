@@ -15,7 +15,7 @@
 </div>
 <div class="row btn-row">
   <div class="col-md-12">
-    <button class="btn btn-primary" data-ng-click="addChocolate()"><i class="fa fa-plus"></i> Add A Chocolate</button>
+    <button class="btn btn-primary" data-ui-sref="addChocolate"><i class="fa fa-plus"></i> Add A Chocolate</button>
   </div>
 </div>
 <div class="row">
@@ -30,19 +30,17 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-md-12">
-        <form role="form" name="chocolateForm" id="chocolateForm" class="row">
+        <form role="form" name="chocolateForm" id="chocolateForm" class="row" novalidate>
           <div class="form-group">
-            <label class="control-label col-md-12" for="maker">Maker
-              <input type="text" class="form-control" id="maker" name="maker" data-ng-model="bar.maker" required>
-            </label>
+            <label class="control-label col-md-12" for="maker">Maker</label>
+            <input type="text" class="form-control" id="maker" name="maker" data-ng-model="bar.maker" required>
             <ul class="errors-list" data-ng-show="chocolateForm.maker.$touched">
               <li data-ng-if="chocolateForm.maker.$error.required">Maker is required</li>
             </ul>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-12" for="name">Name
-              <input type="text" class="form-control" id="name" name="name" data-ng-model="bar.name" required>
-            </label>
+            <label class="control-label col-md-12" for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" data-ng-model="bar.name" required>
             <ul class="errors-list" data-ng-show="chocolateForm.name.$touched">
               <li data-ng-if="chocolateForm.name.$error.required">Name is required</li>
             </ul>
@@ -55,33 +53,29 @@
             </ul>
           </div>
           <div class="form-group" data-ng-if="action === 'Add'">
-            <label class="control-label col-md-12" for="review">Review
-              <textarea id="review" name="review" class="form-control" data-ng-model="bar.review" required></textarea>
-            </label>
+            <label class="control-label col-md-12" for="review">Review</label>
+            <textarea id="review" name="review" class="form-control" data-ng-model="bar.review" required></textarea>
             <ul class="errors-list" data-ng-show="chocolateForm.review.$touched">
               <li data-ng-if="chocolateForm.review.$error.required">Review is required</li>
             </ul>
           </div>
           <div class="form-group" data-ng-if="action === 'Edit'">
-            <label class="control-label col-md-12" for="active">Is Active?
-              <select id="active" name="active" class="form-control" data-ng-model="bar.active" required>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-              <ul class="errors-list" data-ng-show="chocolateForm.active.$touched">
-                <li data-ng-if="chocolateForm.active.$error.required">Is Active is required</li>
-              </ul>
-            </label>
+            <label class="control-label col-md-12" for="active">Is Active?</label>
+            <select id="active" name="active" class="form-control" data-ng-model="bar.active" required>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+            <ul class="errors-list" data-ng-show="chocolateForm.active.$touched">
+              <li data-ng-if="chocolateForm.active.$error.required">Is Active is required</li>
+            </ul>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-12" for="amazonLink">Amazon Link
-              <input type="text" class="form-control" id="amazonLink" name="amazonLink" data-ng-model="bar.amazonLink" />
-            </label>
+            <label class="control-label col-md-12" for="amazonLink">Amazon Link</label>
+            <input type="text" class="form-control" id="amazonLink" name="amazonLink" data-ng-model="bar.amazonLink" />
           </div>
           <div class="form-group">
-            <label class="control-label col-md-12" for="amazonImage">Amazon Image
-              <input type="text" class="form-control" id="amazonImage" name="amazonImage" data-ng-model="bar.amazonImage" />
-            </label>
+            <label class="control-label col-md-12" for="amazonImage">Amazon Image</label>
+            <input type="text" class="form-control" id="amazonImage" name="amazonImage" data-ng-model="bar.amazonImage" />
           </div>
         </form>
       </div>

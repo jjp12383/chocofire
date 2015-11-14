@@ -14,7 +14,7 @@ angular.module('chocofireApp')
     };
   }])
 
-  .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+  .config(['$stateProvider', '$urlRouterProvider','RestangularProvider', function ($stateProvider, $urlRouterProvider, RestangularProvider) {
     $urlRouterProvider.otherwise('/home');
 
     $stateProvider
@@ -72,11 +72,29 @@ angular.module('chocofireApp')
         templateUrl: 'views/userProfile.html',
         controller: 'UserProfileCtrl'
       })
+      .state('addChocolate', {
+        url: '/addChocolate',
+        templateUrl: 'views/addChocolate.html',
+        controller: 'AddChocolateCtrl'
+      })
+      .state('editChocolate', {
+        url: '/editChocolate/:id',
+        templateUrl: 'views/editChocolate.html',
+        controller: 'EditChocolateCtrl'
+      })
+      .state('scannedChocolate', {
+        url: '/addChocolate/:id',
+        templateUrl: 'views/scannedChocolate.html',
+        controller: 'ScannedChocolateCtrl'
+      })
       .state('about', {
         url: '/about',
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
-      })
+      });
+
+
+    RestangularProvider.setBaseUrl('http://ec2-52-8-197-62.us-west-1.compute.amazonaws.com');
   }])
 
   .run(['$rootScope', '$location', 'Auth', 'SECURED_ROUTES', 'loginRedirectPath','$state',

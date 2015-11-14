@@ -1,16 +1,23 @@
-<div class="row">
+<span us-spinner spinner-key="spinner-1"></span>
+<div class="row page-content">
+  <div class="col-lg-3 col-md-3 bar-image-container" data-ng-show="listing.amazonImage !== 'false'">
+    <div class="bar-image" back-img="{{listing.amazonImage}}"></div>
+  </div>
   <div class="col-lg-4 col-md-3">
     <h2 class="heading-2">{{listing.maker}}</h2>
     <h3 class="heading-3">{{listing.name}}</h3>
+    <div class="buy-bar-link" data-ng-show="listing.amazonImage !== 'false'">
+      <a data-ng-href="{{listing.amazonLink}}" target="_blank"><i class="fa fa-dollar"> Buy this bar!</i></a>
+    </div>
   </div>
-  <div class="col-lg-8 col-md-9">
+  <div class="col-lg-5 col-md-6" data-ng-class="{'col-lg-5 col-md-6': listing.amazonImage !== 'false', 'col-lg-8 col-md-9': listing.amazonImage === 'false'}">
     <div class="form form-horizontal">
       <div class="form-group rating-group">
-        <label class="rating-label control-label col-md-4">Average Rating</label>
-        <div class="col-md-4">
-          <jp-rating id="ratingBar" class="rating" data-ng-model="listing.rating" max="10" popover-template="ratingPopover.templateUrl" popover-placement="bottom" popover-title="{{ratingPopover.title}}" readonlyr="true"></jp-rating>
+        <div class="col-md-4" data-ng-show="listing.amazonImage === 'false'"></div>
+        <div class="col-md-7" data-ng-class="{'col-md-7': listing.amazonImage !== 'false', 'col-md-4': listing.amazonImage === 'false'}">
+          <jp-rating id="ratingBar" class="rating listing-rating" data-ng-model="listing.rating" max="10" popover-template="ratingPopover.templateUrl" popover-placement="bottom" popover-title="{{ratingPopover.title}}" readonlyr="true"></jp-rating>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5" data-ng-class="{'col-md-5': listing.amazonImage !== 'false', 'col-md-4': listing.amazonImage === 'false'}">
           <button class="btn btn-lg btn-primary" id="leaveReview" data-ng-click="showReview = !showReview"><span data-ng-show="!reviewSubmitted">Leave A Review</span><span data-ng-show="reviewSubmitted">Edit Your Review</span></button>
         </div>
       </div>
@@ -19,13 +26,13 @@
 </div>
 <div class="row" data-ng-hide="!showReview">
   <div class="col-md-12">
-    <jp-rating id="ratingBar2" class="rating pull-left" data-ng-model="rating" max="10" readonlyr="false"></jp-rating>
+    <jp-rating id="ratingBar2" class="rating pull-left" data-ng-model="rating" max="10" readonlyr="false" style="margin-top: 15px;"></jp-rating>
     <textarea data-ng-model="reviewText" class="form-control" placeholder="Leave your review"></textarea>
     <button class="btn btn-sm btn-primary review-button btn-row" data-ng-click="leaveReview(); showReview = !showReview">Submit</button>
     <button class="btn btn-sm btn-warning review-button btn-row" data-ng-click="showReview = !showReview">Cancel</button>
   </div>
 </div>
-<div class="row">
+<div class="row page-content">
   <div class="col-md-12">
     <hr>
     <legend>Reviews</legend>
@@ -33,12 +40,12 @@
       <a class="user-link" href="#/userProfile/{{review.userId}}">{{review.user}}</a>
       <jp-rating class="rating rating-small" data-ng-model="review.rating" max="10" readonlyr="true"></jp-rating>
       <span class="time-ago">{{review.dateTime | timeago}}</span>
-      <button data-ng-disabled="review.userFlagged" data-ng-click="reportReview(review); userReviewed(review)" class="btn btn-primary btn-responsive btn-xs report-review-button">
+      <button ng-show-auth="" data-ng-disabled="review.userFlagged" data-ng-click="reportReview(review); userReviewed(review)" class="btn btn-primary btn-responsive btn-xs report-review-button">
         <i class="fa fa-flag"></i>
         <span data-ng-hide="review.userFlagged" class="hidden-xs"> Flag</span>
         <span data-ng-show="review.userFlagged" class="hidden-xs"> Flagged By You</span>
       </button>
-      <button data-ng-click="deleteReview(review)" data-ng-if="user.role > 74" class="btn btn-responsive btn-warning btn-xs delete-review-button"><i class="fa fa-edit"></i><span class="hidden-xs"> Delete</span></button>
+      <button data-ng-click="deleteReview(review)" ng-show-auth data-ng-if="user.role > 74" class="btn btn-responsive btn-warning btn-xs delete-review-button"><i class="fa fa-edit"></i><span class="hidden-xs"> Delete</span></button>
       <div class="review-text">"{{review.content}}"</div>
     </div>
   </div>

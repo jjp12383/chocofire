@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chocofireApp')
-  .controller('MainCtrl', function ($scope, $cookies, $rootScope, $route, $localStorage, $firebaseArray, Ref, $location, User, Chocolate, usSpinnerService, $timeout) {
+  .controller('MainCtrl', function ($scope, $cookies, $state, $rootScope, Auth, $route, $localStorage, $firebaseArray, Ref, $location, User, Chocolate, usSpinnerService, $timeout, Restangular) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -83,9 +83,5 @@ angular.module('chocofireApp')
           $scope.spinneractive = false;
         }
       });
-
-      $scope.addChocolate = function () {
-        Chocolate.addChocolate('user');
-      }
     });
   });

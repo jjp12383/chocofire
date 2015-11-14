@@ -1,5 +1,5 @@
 angular.module('chocofireApp')
-  .controller('AdminChocolatesCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, User, Chocolate, $timeout, $modal, $location, $localStorage, uiGridConstants) {
+  .controller('AdminChocolatesCtrl', function ($scope, user, $q, Auth, Ref, $firebaseArray, $firebaseObject, User, Chocolate, $timeout, $modal, $location, $localStorage, uiGridConstants, $rootScope) {
 
     $scope.chocolates = Chocolate.getChocolates();
 
@@ -90,17 +90,20 @@ angular.module('chocofireApp')
 
     $scope.addChocolate = function () {
       Chocolate.addChocolate('admin');
-      $scope.gridApi.grid.refresh()
     };
 
     $scope.editChocolate = function (row) {
-      Chocolate.editChocolate(row);
-      $scope.gridApi.grid.refresh()
+      $location.path('/editChocolate/' + row.$id);
     };
 
     $scope.removeChocolate = function (row) {
       Chocolate.deleteChocolate(row);
-      $scope.gridApi.grid.refresh();
     };
+
+    $rootScope.$on('CHOCOLATE_LIST_UPDATED', function () {
+      $timeout(function () {
+        $scope.gridApi.grid.refresh();
+      },50);
+    })
 
   });

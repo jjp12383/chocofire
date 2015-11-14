@@ -1,5 +1,5 @@
 angular.module('chocofireApp')
-  .factory('Chocolate', function (Ref, $firebaseArray, $firebaseObject, User, $modal) {
+  .factory('Chocolate', function (Ref, $firebaseArray, $firebaseObject, User, $modal, $rootScope, Auth, $state) {
 
     var chocolateFunctions = {};
 
@@ -8,77 +8,43 @@ angular.module('chocofireApp')
       return chocolates;
     };
 
-    chocolateFunctions.addChocolate = function(role) {
+    chocolateFunctions.addChocolate = function(bar) {
       var user = User.getLocalUser();
       var chocolates = chocolateFunctions.getChocolates();
-
-      var modalInstance = $modal.open({
-        templateUrl: 'chocolatesModal.html',
-        controller: 'ChocolatesmodalCtrl',
-        resolve: {
-          bar: function () {
-            return {
-              _id: null
-            };
-          },
-          role: function () {
-            return role;
-          },
-          action: function () {
-            return 'Add'
-          }
-        }
-      });
-      modalInstance.result.then(function (bar, id) {
-        chocolates.$add({
+      chocolates.$add({
+        maker: bar.maker,
+        name: bar.name,
+        rating: bar.rating,
+        review: bar.review,
+        active: "true",
+        amazonLink: bar.amazonLink,
+        amazonImage: bar.amazonImage,
+        hasALink: bar.hasALink
+      }).then(function(ref) {
+        var id = ref.key(),
+          userReviews = {},
+          reviews = $firebaseObject(Ref.child('chocolates').child(id).child('userReviews'));
+        userReviews = {
           maker: bar.maker,
           name: bar.name,
+          content: bar.review,
           rating: bar.rating,
-          review: bar.review,
-          active: "true",
-          amazonLink: "false",
-          amazonImage: "false",
-          hasALink: "false"
-        }).then(function(ref) {
-          var id = ref.key(),
-            userReviews = {},
-            reviews = $firebaseObject(Ref.child('chocolates').child(id).child('userReviews'));
-          userReviews = {
-            maker: bar.maker,
-            name: bar.name,
-            content: bar.review,
-            rating: bar.rating,
-            dateTime: Firebase.ServerValue.TIMESTAMP,
-            user: user.firstName,
-            userId: user.id,
-            barId: id
-          };
+          dateTime: Firebase.ServerValue.TIMESTAMP,
+          user: user.firstName,
+          userId: user.id,
+          barId: id
+        };
 
-          reviews[user.id] = userReviews;
-          reviews.$save();
-        });
+        reviews[user.id] = userReviews;
+        reviews.$save();
+        $rootScope.$broadcast('CHOCOLATE_ADDED');
       });
     };
 
-    chocolateFunctions.editChocolate = function (bar) {
-      var modalInstance = $modal.open({
-        templateUrl: 'chocolatesModal.html',
-        controller: 'ChocolatesmodalCtrl',
-        resolve: {
-          bar: function () {
-            return bar;
-          },
-          role: function () {
-            return 'admin';
-          },
-          action: function () {
-            return 'Edit';
-          }
-        }
-      });
-      modalInstance.result.then(function (chocolate) {
-        var bar = $firebaseObject(Ref.child('chocolates').child(chocolate.id));
-        var reviews = $firebaseObject(Ref.child('chocolates').child(chocolate.id).child('userReviews'));
+    chocolateFunctions.editChocolate = function (chocolate) {
+
+      var bar = $firebaseObject(Ref.child('chocolates').child(chocolate.$id));
+      bar.$loaded().then(function () {
         bar.maker = chocolate.maker;
         bar.name = chocolate.name;
         bar.rating = chocolate.rating;
@@ -86,9 +52,14 @@ angular.module('chocofireApp')
         bar.active = chocolate.active;
         bar.amazonImage = chocolate.amazonImage;
         bar.amazonLink = chocolate.amazonLink;
-        bar.hasALink = chocolate.hasALink;
-        bar.userReviews = reviews;
+        bar.userReviews = bar.userReviews;
+        if(bar.amazonLink === 'false') {
+          bar.hasALink = "false";
+        } else {
+          bar.hasALink = chocolate.hasALink;
+        }
         bar.$save();
+        $rootScope.$emit('CHOCOLATE_EDITED', true);
       });
     };
 
@@ -106,8 +77,9 @@ angular.module('chocofireApp')
         var id = chocolate.$id;
         var chocolates = $firebaseObject(Ref.child('chocolates').child(id));
         chocolates.$remove();
+        $rootScope.$broadcast('CHOCOLATE_LIST_UPDATED', true);
       });
-    }
+    };
 
     return chocolateFunctions;
   });
