@@ -19,6 +19,22 @@
         <input id="lastName" data-ng-model="user.profile.lastName" class="form-control" type="text" />
       </div>
     </div>
+    <div class="email-opt">
+      <div class="check-cell">
+        <input type="checkbox" id="optWeeklyEmail" data-ng-model="user.profile.optForWeeklyEmail" data-ng-change="toggleEmail()" />
+      </div>
+      <div class="label-cell">
+        Yes, receive notifications of new chocolate reviews
+      </div>
+    </div>
+    <div class="email-opt">
+      <div class="check-cell">
+        <input type="checkbox" id="optOtherEmail" data-ng-model="user.profile.optForOtherEmail" data-ng-change="toggleEmail()" />
+      </div>
+      <div class="label-cell">
+        Yes, receive notifications from Chocoverse.com about other site news
+      </div>
+    </div>
     <form name="changePasswordForm" id="changePasswordForm" novalidate>
       <div data-ng-if="user.profile.provider === 'email' && isUser">
         <h3>Change Password</h3>

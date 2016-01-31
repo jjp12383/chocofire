@@ -1134,3 +1134,20 @@ label.table-label {
 .btn-link:hover, .btn-link:active {
   color: #5f554c;
 }
+
+.email-opt {
+  display: table-row;
+}
+
+.email-opt .check-cell, .email-opt .label-cell {
+  display: table-cell;
+}
+
+.email-opt .label-cell {
+  padding-left: 10px;
+}
+
+.list-no-style {
+  padding: 0;
+  list-style: none;
+}

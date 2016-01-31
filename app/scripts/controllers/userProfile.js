@@ -153,6 +153,10 @@ angular.module('chocofireApp')
             .catch(error);
         };
 
+        $scope.toggleEmail = function() {
+          $scope.user.$save()
+        }
+
         function error(err) {
           alert(err, 'Error');
         }
