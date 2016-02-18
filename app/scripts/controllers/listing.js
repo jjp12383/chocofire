@@ -63,6 +63,11 @@ angular.module('chocofireApp')
 
       checkArray();
 
+      var searchString = $scope.listing.maker + ' ' + $scope.listing.name;
+      $scope.searchUrl = 'https://www.google.com/search?q=';
+      searchString = searchString.split(' ').join('+');
+      $scope.searchUrl += searchString + '&tbm=shop';
+
       function round(number) {
         var value = (number * 2).toFixed() / 2;
         return value;

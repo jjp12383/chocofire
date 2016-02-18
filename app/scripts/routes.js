@@ -23,6 +23,11 @@ angular.module('chocofireApp')
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .state('pairings', {
+        url: '/pairings',
+        templateUrl: 'views/pairings.html',
+        controller: 'PairingsCtrl'
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',

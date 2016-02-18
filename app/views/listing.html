@@ -6,8 +6,8 @@
   <div class="col-lg-4 col-md-3">
     <h2 class="heading-2">{{listing.maker}}</h2>
     <h3 class="heading-3">{{listing.name}}</h3>
-    <div class="buy-bar-link" data-ng-show="listing.amazonImage !== 'false'">
-      <a data-ng-href="{{listing.amazonLink}}" target="_blank"><i class="fa fa-dollar"> Buy this bar!</i></a>
+    <div class="buy-bar-link">
+      <a data-ng-href="{{searchUrl}}" target="_blank"><i class="fa fa-dollar"> Buy this bar!</i></a>
     </div>
   </div>
   <div class="col-lg-5 col-md-6" data-ng-class="{'col-lg-5 col-md-6': listing.amazonImage !== 'false', 'col-lg-8 col-md-9': listing.amazonImage === 'false'}">
