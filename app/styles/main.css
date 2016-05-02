@@ -1151,3 +1151,54 @@ label.table-label {
   padding: 0;
   list-style: none;
 }
+
+.auto-complete-star {
+  height: 18px;
+  width: 100px;
+  display: block;
+  background: url('../images/star_sprite_all.png') no-repeat;
+}
+
+.auto-complete-star.star-0 {
+  background-position: 0 0;
+}
+
+.auto-complete-star.star-5 {
+  background-position: 0 -20px;
+}
+
+.auto-complete-star.star-10 {
+  background-position: 0 -40px;
+}
+
+.auto-complete-star.star-15 {
+  background-position: 0 -60px;
+}
+
+.auto-complete-star.star-20 {
+  background-position: 0 -79px;
+}
+
+.auto-complete-star.star-25 {
+  background-position: 0 -99px;
+}
+
+.auto-complete-star.star-30 {
+  background-position: 0 -118px;
+}
+
+.auto-complete-star.star-35 {
+  background-position: 0 -138px;
+}
+
+.auto-complete-star.star-40 {
+  background-position: 0 -158px;
+}
+
+.auto-complete-star.star-45 {
+  background-position: 0 -177px;
+}
+
+.auto-complete-star.star-50 {
+  background-position: 0 -196px;
+}
